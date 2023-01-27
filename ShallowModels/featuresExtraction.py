@@ -4,7 +4,8 @@ from sklearn import *
 import imutils, cv2
 from tqdm import tqdm 
 from scipy import cluster 
-from dataloader import classification_dataset
+from DeepModels.dataloader import classification_dataset, getMasks
+
 
 
 def get_area_primeter(images):
@@ -12,8 +13,8 @@ def get_area_primeter(images):
     areas_primeters = np.zeros((len(images), 2), dtype=np.float32)
 
     for i, img in tqdm(enumerate(images)):
-        gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-        edged = cv2.Canny(gray, 50, 100)
+        # gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        edged = cv2.Canny(img, 50, 100)
         edged = cv2.dilate(edged, None, iterations=1)
         edged = cv2.erode(edged, None, iterations=1)
         cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -31,7 +32,8 @@ def get_area_primeter(images):
 
     return areas_primeters
 
-def colors_extraction(image, NUM_CLUSTERS = 5):
+
+def colors_extraction(image, NUM_CLUSTERS=5):
 
     shape  = image.shape
     image = image.reshape(np.product(shape[:2]), shape[2]).astype(np.float32)
@@ -46,10 +48,10 @@ def colors_extraction(image, NUM_CLUSTERS = 5):
 def extract_features():
 
     X, Y = classification_dataset()
-    X_colormap, _ = classification_dataset(path='colormap')
+    masks = getMasks()
     dataset = pd.DataFrame(Y, columns = ['Y'])
 
-    areas_primeters = get_area_primeter(X_colormap)
+    areas_primeters = get_area_primeter(masks)
     dataset['area'], dataset['primeter'] = areas_primeters[:, 0], areas_primeters[:, 1]
 
 
