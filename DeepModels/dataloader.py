@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import image_dataset_from_directory
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.resnet50 import preprocess_input
+from tensorflow.keras.layers.experimental.preprocessing import Rescaling
 
 
 def data_pipeline(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=42, validation_split=0.2):
@@ -16,6 +17,7 @@ def data_pipeline(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=
               image_size=IMAGESIZE, 
               batch_size=BATCHSIZE
               )
+  trainDataset.map(lambda image,label:(Rescaling(scale=1/255.)(image),label))
 
   validateDataset = image_dataset_from_directory( 
               DIR,
@@ -25,11 +27,33 @@ def data_pipeline(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=
               image_size=IMAGESIZE,
               batch_size=BATCHSIZE
               )
-  
+  validateDataset.map(lambda image,label:(Rescaling(scale=1/255.)(image),label))
+
   return trainDataset, validateDataset
 
+# def data_pipeline(DIR='classification', BATCHSIZE=16, IMAGESIZE=(256, 256), seed=42, validation_split=0.2):
+#   trainDataset = image_dataset_from_directory(
+#               DIR,
+#               validation_split=validation_split,
+#               subset="training",
+#               seed=seed,
+#               image_size=IMAGESIZE, 
+#               batch_size=BATCHSIZE
+#               )
 
-def data_pipeline_with_augmentation(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=42, validation_split=0.2):
+#   validateDataset = image_dataset_from_directory( 
+#               DIR,
+#               validation_split=validation_split,
+#               subset="validation",
+#               seed=seed,
+#               image_size=IMAGESIZE,
+#               batch_size=BATCHSIZE
+#               )
+  
+#   return trainDataset, validateDataset
+
+
+def data_pipeline_with_augmentation(DIR='classification', BATCHSIZE=16, IMAGESIZE=(256, 256), seed=42, validation_split=0.2):
 
     imageDatagen = ImageDataGenerator(
         validation_split=validation_split, 
@@ -131,3 +155,5 @@ def augmentation_dataset(imagesPath = os.path.join('trainGAN', '*')):
         Images[i] = img
 
     return Images
+
+

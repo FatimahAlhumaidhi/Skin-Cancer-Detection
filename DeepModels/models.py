@@ -47,6 +47,41 @@ def getModel(preTrained, learning_rate=6e-5, freezeRange=0, trainbatchnorm=False
     return model
 
 
+
+# def getModel(preTrained, learning_rate=1e-4, freezeRange=0, trainbatchnorm=True, dropout=0.8):
+#     """
+#     returns a compiled, pretrained model with input_shape=(256, 256, 3)
+#     and binary classification output
+#     """
+#     model = preTrained(
+#       include_top=False,
+#       weights='imagenet',
+#       input_tensor=None,
+#       input_shape=(128, 128, 3),
+#       pooling='avg', 
+#     ) 
+
+#     if not trainbatchnorm:
+#         for layer in model.layers:
+#             if isinstance(layer, BatchNormalization) or isinstance(layer, Dropout):
+#                 layer.trainable = False
+
+#     for layer in model.layers[:freezeRange]:
+#                 layer.trainable = False
+
+#     model = Sequential([model,
+#                         Dropout(0.8),
+#                         Flatten(name='top_flatten'),
+#                         Dense(64, activation='relu', name='dense_64'),
+#                         # Dense(256, activation='relu', name='dense_256'),
+#                         Dropout(0.6),
+#                         Dense(1, activation=sigmoid, name='output_layer')
+#     ])
+
+#     model.compile(optimizer = Adam(learning_rate=learning_rate), loss = 'binary_crossentropy', metrics = ['Accuracy', 'Recall', 'Precision'])
+
+#     return model
+
 # -------------------------------------------------------------------------------
 # ---------------------------- segmentation model -------------------------------
 # -------------------------------------------------------------------------------
