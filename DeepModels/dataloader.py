@@ -17,7 +17,7 @@ def data_pipeline(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=
               image_size=IMAGESIZE, 
               batch_size=BATCHSIZE
               )
-  trainDataset.map(lambda image,label:(Rescaling(scale=1/255.)(image),label))
+  trainDataset = trainDataset.map(lambda image,label:(Rescaling(scale=1/255.)(image),label))
 
   validateDataset = image_dataset_from_directory( 
               DIR,
@@ -27,7 +27,7 @@ def data_pipeline(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=
               image_size=IMAGESIZE,
               batch_size=BATCHSIZE
               )
-  validateDataset.map(lambda image,label:(Rescaling(scale=1/255.)(image),label))
+  validateDataset = validateDataset.map(lambda image,label:(Rescaling(scale=1/255.)(image),label))
 
   return trainDataset, validateDataset
 

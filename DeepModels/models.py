@@ -12,7 +12,7 @@ from tensorflow.keras.activations import sigmoid
 # -------------------------------------------------------------------------------
 
 
-def getModel(preTrained, learning_rate=6e-5, freezeRange=0, trainbatchnorm=False, dropout=0.4):
+def getModel(preTrained, learning_rate=6e-5, freezeRange=0, trainbatchnorm=False, dropout=[0.4, 0.4, 0.4] , denseSize=[4096, 4096, 4096]):
     """
     returns a compiled, pretrained model with input_shape=(256, 256, 3)
     and binary classification output
@@ -35,14 +35,16 @@ def getModel(preTrained, learning_rate=6e-5, freezeRange=0, trainbatchnorm=False
 
     model = Sequential([model,
                         Flatten(name='top_flatten'),
-                        Dense(500, activation='relu', name='dense_500'),
-                        Dropout(dropout),
-                        Dense(256, activation='relu', name='dense_256'),
-                        Dropout(dropout),
+                        Dense(denseSize[0], activation='relu', name=f'dense_{denseSize[0]}'),
+                        Dropout(dropout[0]),
+                        Dense(denseSize[1], activation='relu', name=f'dense_{denseSize[1]}_2'),
+                        Dropout(dropout[1]),
+                        Dense(denseSize[2], activation='relu', name=f'dense_{denseSize[2]}_3'),
+                        Dropout(dropout[2]),
                         Dense(1, activation=sigmoid, name='output_layer')
     ])
 
-    model.compile(optimizer = Adam(learning_rate=learning_rate), loss = 'binary_crossentropy', metrics = ['Accuracy', 'Recall', 'Precision'])
+    model.compile(optimizer = Adam(learning_rate=learning_rate), loss = 'binary_crossentropy', metrics = ['Accuracy', 'Recall', 'Precision', 'TrueNegatives', 'TruePositives', 'FalsePositives', 'FalseNegatives'])
 
     return model
 
