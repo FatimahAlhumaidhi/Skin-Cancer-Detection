@@ -14,11 +14,7 @@ def preprocess(imagepath, IMAGESIZE = (256, 256), destinationPath=''):
     blackhat = cv2.morphologyEx(grayScale, cv2.MORPH_BLACKHAT, kernel) 
     bhg = cv2.GaussianBlur(blackhat, (3, 3), cv2.BORDER_DEFAULT)
 
-    kernel = np.ones((3, 3), np.uint8)
-    dilation = cv2.dilate(bhg, kernel, iterations=1)
-    erosion = cv2.erode(dilation, kernel, iterations=1)
-
-    _, mask = cv2.threshold(erosion, 15, 255, cv2.THRESH_BINARY)
+    _, mask = cv2.threshold(bhg, 15, 255, cv2.THRESH_BINARY)
     dst = cv2.inpaint(image, mask, 6, cv2.INPAINT_TELEA) 
 
     dst = cv2.resize(dst, IMAGESIZE)
@@ -29,17 +25,18 @@ def preprocess_mask(maskPath, IMAGESIZE = (256, 256), destinationPath=''):
     """
     resize mask and write it back
     """
-    mask = cv2.imread(maskPath, cv2.IMREAD_GRAYSCALE)
-    mask = mask / 255.
+
+    mask = cv2.imread(maskPath, cv2.IMREAD_GRAYSCALE)/255.
     mask[mask > 0.5] = 1
     mask[mask <= 0.5] = 0
     mask = cv2.resize(mask, IMAGESIZE)
+
     cv2.imwrite(os.path.join(destinationPath, maskPath.split('\\')[-1]), 255*mask)
 
 
 def apply_mask(image, mask, imname, destinationPath=''):
     """
-    apply mask and write it back
+    apply mask on lesion image then write it back
     """
     mask = mask.astype(np.uint8)
     seg = cv2.bitwise_and(image, image, mask=mask)*255.

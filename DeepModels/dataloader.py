@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import image_dataset_from_directory
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.resnet50 import preprocess_input
-from tensorflow.keras.layers.experimental.preprocessing import Rescaling
 
 
 def data_pipeline(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=42, validation_split=0.2):
@@ -17,7 +16,6 @@ def data_pipeline(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=
               image_size=IMAGESIZE, 
               batch_size=BATCHSIZE
               )
-  trainDataset = trainDataset.map(lambda image,label:(Rescaling(scale=1/255.)(image),label))
 
   validateDataset = image_dataset_from_directory( 
               DIR,
@@ -27,30 +25,8 @@ def data_pipeline(DIR='classification', BATCHSIZE=8, IMAGESIZE=(256, 256), seed=
               image_size=IMAGESIZE,
               batch_size=BATCHSIZE
               )
-  validateDataset = validateDataset.map(lambda image,label:(Rescaling(scale=1/255.)(image),label))
 
   return trainDataset, validateDataset
-
-# def data_pipeline(DIR='classification', BATCHSIZE=16, IMAGESIZE=(256, 256), seed=42, validation_split=0.2):
-#   trainDataset = image_dataset_from_directory(
-#               DIR,
-#               validation_split=validation_split,
-#               subset="training",
-#               seed=seed,
-#               image_size=IMAGESIZE, 
-#               batch_size=BATCHSIZE
-#               )
-
-#   validateDataset = image_dataset_from_directory( 
-#               DIR,
-#               validation_split=validation_split,
-#               subset="validation",
-#               seed=seed,
-#               image_size=IMAGESIZE,
-#               batch_size=BATCHSIZE
-#               )
-  
-#   return trainDataset, validateDataset
 
 
 def data_pipeline_with_augmentation(DIR='classification', BATCHSIZE=16, IMAGESIZE=(256, 256), seed=42, validation_split=0.2):
@@ -144,16 +120,16 @@ def getMasks(path='masks'):
 
     return X
 
-def augmentation_dataset(imagesPath = os.path.join('trainGAN', '*')):
-    realImages = glob(imagesPath)
+# def augmentation_dataset(imagesPath = os.path.join('trainGAN', '*')):
+#     realImages = glob(imagesPath)
 
-    Images = np.zeros((len(realImages), 256, 256, 3), dtype=np.float32)
+#     Images = np.zeros((len(realImages), 256, 256, 3), dtype=np.float32)
 
-    for i, image in tqdm(enumerate(realImages)):
-        img = cv2.imread(image)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)/255.
-        Images[i] = img
+#     for i, image in tqdm(enumerate(realImages)):
+#         img = cv2.imread(image)
+#         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)/255.
+#         Images[i] = img
 
-    return Images
+#     return Images
 
 
