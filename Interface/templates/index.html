@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Skin Cancer detection</title>
+  </head>
+  <body>
+    <style>
+      body {
+      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+      font-style: normal;
+      font-weight: 400;
+      background-color: rgb(155, 139, 139);
+      }
+      
+      h1 {
+        text-align: center;
+      }
+      
+      form {
+        width: 400px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      
+      input[type="file"] {
+        border-radius: 10px;
+        border: 2px solid #ffffff;
+        padding: 14px;
+        display: block;
+        margin: 0 auto;
+      }
+      
+      input[type="submit"] {
+        display: block;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      
+      input[type="submit"]:hover {
+        background-color: #444;
+      }
+  
+    </style>
+    <h1>Skin Cancer Detection</h1>
+      <input type="file" name="image" id="fileInput">
+      <br>
+      <input type="submit" value="Upload" onclick="upload()">
+  </body>
+  <script>
+    function upload(){
+      const file = document.getElementById('fileInput').files[0];
+        if(file){
+            var formData = new FormData();
+            formData.append('file', file);
+            fetch('/upload', {
+                   method: 'POST',
+                   body: formData,
+                 })
+                 .then(response => {
+                   console.log(response);
+                 })
+                 .catch(error => {
+                   console.error(error);
+                 });
+        }
+    }
+    </script>
+</html>
