@@ -39,8 +39,8 @@ def apply_mask(image, mask, imname, destinationPath=''):
     apply mask on lesion image then write it back
     """
     mask = mask.astype(np.uint8)
-    seg = cv2.bitwise_and(image, image, mask=mask)*255.
-    newimage = cv2.cvtColor(seg, cv2.COLOR_RGB2BGR)
+    seg = cv2.bitwise_and(image, image, mask=mask)*255
+    newimage = cv2.cvtColor(seg.astype(np.uint8), cv2.COLOR_RGB2BGR)
     cv2.imwrite(os.path.join(destinationPath, imname), newimage)
     return seg
 

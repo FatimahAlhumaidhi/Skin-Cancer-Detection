@@ -1,0 +1,374 @@
+\documentclass[border=8pt, multi, tikz]{standalone}
+%\usepackage{blocks}
+% \usepackage[top=4cm,left=2cm]{geometry}
+\usepackage{import}
+\subimport{./layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d} %for including external image 
+
+
+\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+\def\ConvReluColor{rgb:yellow,5;red,5;white,5}
+\def\bnColor{rgb:yellow,5;red,5}
+\def\PoolColor{rgb:red,1;black,0.3}
+\def\UnpoolColor{rgb:blue,2;green,1;black,0.3}
+\def\FcColor{rgb:blue,5;red,2.5;white,5}
+\def\FcReluColor{rgb:blue,5;red,5;white,4}
+\def\SoftmaxColor{rgb:magenta,5;black,7}
+\def\SumColor{rgb:blue,5;green,15}
+\def\LayerColor{rgb:black,1}
+
+\newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width =0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
+
+
+\begin{document}
+\noindent
+\begin{tikzpicture}
+	\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
+	\tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%% Draw Encoder
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ % lesion pic
+	\node[canvas is zy plane at x=0](temp) at (-3.5,0,0) {\includegraphics[width=20cm,height=20cm]{lesion.jpg}};
+
+	\path (-4,0,0);
+	% input
+	\pic[shift={(0,0,0)}] at (0,0,0) {
+		Box={
+				name=input,
+				caption= \Large{Input},
+				xlabel= 3,
+				ylabel=256,
+				zlabel= \qquad 256,
+				fill=\ConvColor,
+				height=100,
+				width=0.1,
+				depth=100
+			}
+	};
+	% conv1
+	\pic[shift={(1.5,0,0)}] at (input-east) {
+		RightBandedBox={
+				name= conv1,
+				caption=\Large{Conv1},
+				xlabel={{"64",""}},
+				ylabel=128,
+				zlabel= \qquad 128,
+				fill=\ConvColor,
+				bandfill=\ConvReluColor,
+				height=50,
+				width=2.1,
+				depth=50
+			}
+	};
+	% MaxPool2d
+	\pic[shift={(1,0,0)}] at (conv1-east) {
+		RightBandedBox={
+			name= MaxPool,
+			xlabel={{"64",""}},
+			ylabel=128,
+			fill=\PoolColor,
+			height=50,
+			width=2.1,
+			depth=50
+		}
+	};
+
+
+
+	% layer1
+	% conv1_1
+	\pic[shift={(3,0,0)}] at (MaxPool-east) {
+		RightBandedBox={
+				name= conv1_1,
+				xlabel={{"64",""}},
+				ylabel= 128,
+				fill=\ConvColor,
+				bandfill=\ConvReluColor,
+				height=50,
+				width=2.1,
+				depth=50
+			}
+	};
+	% conv1_2
+	\pic[shift={(0,0,0)}] at (conv1_1-east) {
+		RightBandedBox={
+				name= conv1_2,
+				xlabel={{"\quad 64",""}},
+				zlabel= \qquad 128,
+				fill=\ConvColor,
+				bandfill=\ConvReluColor,
+				height=50,
+				width=2.1,
+				depth=50
+			}
+	};
+	% conv1_3
+	\pic[shift={(0,0,0)}] at (conv1_2-east) {
+		RightBandedBox={
+				name= conv1_3,
+				xlabel={{"\quad 256",""}},
+				zlabel= \qquad 128,
+				fill=\ConvColor,
+				bandfill=\ConvReluColor,
+				height=50,
+				width=8.4,
+				depth=50
+			}
+	};
+	% add1_1
+	\pic[shift={(2,0,0)}] at (conv1_3-east) {
+		Ball={
+				name=add1_1,
+				fill=\SumColor,
+				opacity=0.6,
+				radius=2,
+				logo=\(+\)
+			}
+	};
+\pic[shift={(-0.2,0,1)}] at (conv1_1-west) {Box={name=env,caption=\textbf{\Large{$\times$ 3}},%
+		xlabel={{"","dummy"}},fill=,opacity=0.1,height=60,width={18.4},depth=60}};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\pic[shift={(4,0,0)}] at (conv1_3-east) {
+		RightBandedBox={
+			name= conv2_1,
+			xlabel={{"128",""}},
+			ylabel= 64,
+			fill=\ConvColor,
+			bandfill=\ConvReluColor,
+			height=25,
+			width=4.2,
+			depth=25
+		}
+	};
+	% conv2_2
+	\pic[shift={(0,0,0)}] at (conv2_1-east) {
+		RightBandedBox={
+			name= conv2_2,
+			xlabel={{"128",""}},
+			zlabel= \qquad 64,
+			fill=\ConvColor,
+			bandfill=\ConvReluColor,
+			height=25,
+			width=4.2,
+			depth=25
+		}
+	};
+	% conv2_3
+	\pic[shift={(0,0,0)}] at (conv2_2-east) {
+		RightBandedBox={
+			name= conv2_3,
+			xlabel={{"512",""}},
+			zlabel= \qquad 64,
+			fill=\ConvColor,
+			bandfill=\ConvReluColor,
+			height=25,
+			width=16.8,
+			depth=25
+		}
+	};
+
+	% add1_2
+	\pic[shift={(2,0,0)}] at (conv2_3-east) {
+		Ball={
+			name=add1_2,
+			fill=\SumColor,
+			opacity=0.6,
+			radius=2,
+			logo=\(+\)
+		}
+	};
+\pic[shift={(-0.4,0,1)}] at (conv2_1-west) {Box={name=env,caption=\textbf{\Large{$\times$ 4}},%
+		xlabel={{"","dummy"}},fill=,opacity=0.1,height=30,width={36.8},depth=30}};
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% conv3_1
+	\pic[shift={(4,0,0)}] at (conv2_3-east) {
+		RightBandedBox={
+			name= conv3_1,
+			xlabel={{"256",""}},
+			ylabel= 32,
+			fill=\ConvColor,
+			bandfill=\ConvReluColor,
+			height=12.5,
+			width=8.4,
+			depth=12.5
+		}
+	};
+	% conv3_2
+	\pic[shift={(0,0,0)}] at (conv3_1-east) {
+		RightBandedBox={
+		name= conv3_2,
+		xlabel={{"256",""}},
+		zlabel= 32,
+		fill=\ConvColor,
+		bandfill=\ConvReluColor,
+		height=12.5,
+		width=8.4,
+		depth=12.5
+		}
+	};
+	% conv3_3
+	\pic[shift={(0,0,0)}] at (conv3_2-east) {
+		RightBandedBox={
+		name= conv3_3,
+		xlabel={{"1024",""}},
+		zlabel= 32,
+		fill=\ConvColor,
+		bandfill=\ConvReluColor,
+		height=12.5,
+		width=33.6,
+		depth=12.5
+		}
+	};
+	
+	% add1_3
+	\pic[shift={(2,0,0)}] at (conv3_3-east) {
+		Ball={
+			name=add1_3,
+			fill=\SumColor,
+			opacity=0.6,
+			radius=2,
+			logo=\(+\)
+		}
+	};
+\pic[shift={(-0.6,0,1)}] at (conv3_1-west) {Box={name=env,caption=\textbf{\Large{$\times$6}},%
+		xlabel={{"","dummy"}},fill=,opacity=0.1,height=20,width={63.6},depth=20}};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	% conv4_1
+	\pic[shift={(4,0,0)}] at (conv3_3-east) {
+		RightBandedBox={
+			name= conv4_1,
+			xlabel={{"512",""}},
+			ylabel= 16,
+			fill=\ConvColor,
+			bandfill=\ConvReluColor,
+			height=6.25,
+			width=16.8,
+			depth=6.25
+		}
+	};
+	% conv4_2
+	\pic[shift={(0,0,0)}] at (conv4_1-east) {
+		RightBandedBox={
+			name= conv4_2,
+			xlabel={{"512",""}},
+			ylabel= 16,
+			fill=\ConvColor,
+			bandfill=\ConvReluColor,
+			height=6.25,
+			width=16.8,
+			depth=6.25
+		}
+	};
+	% conv4_3
+	\pic[shift={(0,0,0)}] at (conv4_2-east) {
+		RightBandedBox={
+			name= conv4_3,
+			xlabel={{"2048",""}},
+			ylabel= 16,
+			fill=\ConvColor,
+			bandfill=\ConvReluColor,
+			height=6.25,
+			width=67.2,
+			depth=6.25
+		}
+	};
+	% add1_4
+	\pic[shift={(2,0,0)}] at (conv4_3-east) {
+		Ball={
+			name=add1_4,
+			fill=\SumColor,
+			opacity=0.6,
+			radius=2,
+			logo= \(+\)
+		}
+	};
+\pic[shift={(-0.8,0,0)}] at (conv4_1-west) {Box={name=env,caption=\textbf{\Large{$\times$ 3}},%
+		xlabel={{"","dummy"}},fill=,opacity=0.1,height=15,width={110.2},depth=15}};
+
+	% avgpool
+\pic[shift={(4,0,0)}] at (add1_4-east) {
+	Box={
+		name=avgpool,
+		caption= \\ \Large{\textbf{avgpool}},
+		xlabel={{"1",""}},
+		ylabel=1,
+		zlabel=\qquad 2048,
+		fill=\PoolColor,
+		height=2,
+		width=2,
+		depth=200
+	}
+};
+
+
+	% fullconnection
+	\pic[shift={(2,0,0)}] at (avgpool-east) {
+		RightBandedBox={
+				name=fc,
+				caption=\makebox[0pt]{
+					 \shortstack[c]{\\ Full\, connection\\softmax}},
+				xlabel={{"1",""}},
+				zlabel=\qquad 3,
+				fill=\FcColor,
+				bandfill=\SoftmaxColor,
+				height=2,
+				width=2,
+				depth=20
+			}
+	};
+
+	% connections
+	\draw [connection]  		(input-east)			-- 	node {\midarrow} 	(conv1-west);
+	\draw [connection]  		(conv1-east)			-- 	node {\midarrow} 	(MaxPool-west);
+	\draw [connection] (MaxPool-east) -- node {\midarrow} (conv1_1-west);
+
+
+	% connections shortcut
+	% conv1 to add1_1
+	\path (MaxPool-east) -- (conv1_1-west) coordinate[pos=0.5] (pool_conv1_1);
+	\path (pool_conv1_1) ++ (0,5,0) coordinate (pool_conv1_1_above);
+	\path (add1_1-north) ++ (0,5,0) coordinate (add1_1-north-above);
+	
+	\draw [connection] (pool_conv1_1) -- node {\midarrow} (pool_conv1_1_above|-add1_1-north-above) -- node {\midarrow} (add1_1-north-above) -- node {\midarrow} (add1_1-north);
+	\draw [connection] (conv1_3-east) -- (add1_1-west);
+	\draw [connection] (add1_1-east) -- node {\midarrow} (conv2_1-west);
+	
+	%
+	\path (conv1_3-east) -- (conv2_1-west) coordinate[pos=0.65] (add_conv_1); % conv1 -> conv2
+	\path (add_conv_1) ++ (0,5,0) coordinate (add_conv_1-above);
+	\path (add1_2-north) ++ (0,5,0) coordinate (add1_2-north-above);
+	\draw [connection] (add_conv_1) -- node {\midarrow} (add_conv_1-above|-add1_2-north-above) -- node {\midarrow} (add1_2-north-above) -- node {\midarrow} (add1_2-north);
+	\draw [connection] (conv2_3-east) -- (add1_2-west);
+	\draw [connection] (add1_2-east) -- node {\midarrow} (conv3_1-west);
+	%%%%%%%%%%%%%%
+	\path (conv2_3-east) -- (conv3_1-west) coordinate[pos=0.75] (add_conv_2);
+	\path (add_conv_2) ++ (0,5,0) coordinate (add_conv_2-above);
+	\path (add1_3-north) ++ (0,5,0) coordinate (add1_3-north-above);
+	\draw [connection] (add_conv_2) -- node {\midarrow} (add_conv_2-above|-add1_3-north-above) -- node {\midarrow} (add1_3-north-above) -- node {\midarrow} (add1_3-north);
+	\draw [connection] (conv3_3-east) -- (add1_3-west);
+	\draw [connection] (add1_3-east) -- node {\midarrow} (conv4_1-west);
+	%%%%%%%%%%%%%%%
+	\path (conv3_3-east) -- (conv4_1-west) coordinate[pos=0.75] (add_conv_3);
+	\path (add_conv_3) ++ (0,5,0) coordinate (add_conv_3-above);
+	\path (add1_4-north) ++ (0,5,0) coordinate (add1_4-north-above);
+	\draw [connection] (add_conv_3) -- node {\midarrow} (add_conv_3-above|-add1_4-north-above) -- node {\midarrow} (add1_4-north-above) -- node {\midarrow} (add1_4-north);
+	\draw [connection] (conv4_3-east) -- (add1_4-west);
+	%\draw [connection] (add1_4-east) -- node {\midarrow} (conv4_1-west);
+\draw [connection](add1_4-east) -- node {\midarrow}(avgpool-west);
+\draw [connection](avgpool-east) -- node {\midarrow}(fc-west);
+	% pool & fullconnection
+\draw	[densely dashed]  (avgpool-nearnortheast)    	--  									(fc-nearnorthwest);
+\draw	[densely dashed]  (avgpool-nearsoutheast)    	--  									(fc-nearsouthwest);
+\draw	[densely dashed]  (avgpool-farnortheast)    	--  									(fc-farnorthwest);
+\draw	[densely dashed]  (avgpool-farsoutheast)    	--  									(fc-farsouthwest);
+%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{tikzpicture}
+\end{document}

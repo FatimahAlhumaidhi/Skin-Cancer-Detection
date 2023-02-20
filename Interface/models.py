@@ -1,7 +1,6 @@
 from tensorflow.keras.models import load_model
 import cv2
 import numpy as np 
-from skimage.filters import threshold_otsu
 
 segmenter = load_model('models/Unet.hdf5') 
 classifier = load_model('models/EfficientNetB7.hdf5') 
@@ -31,10 +30,8 @@ def predict(image):
     
     image = preprocess(image)
     predictedMask = segmenter.predict(np.reshape(image, (1, 256, 256, 3))) 
-    # _, mask = cv2.threshold(predictedMask, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    predictedMask = np.reshape(predictedMask, (256, 256, 1))
-    thresh = threshold_otsu(predictedMask)
-    mask = predictedMask > thresh
+    predictedMask = (np.reshape(predictedMask, (256, 256, 1))*255).astype(np.uint8) 
+    _, mask = cv2.threshold(predictedMask, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     output = apply_mask(image, mask)
     prediction = classifier.predict(np.reshape(output, (1, 256, 256, 3)))
 

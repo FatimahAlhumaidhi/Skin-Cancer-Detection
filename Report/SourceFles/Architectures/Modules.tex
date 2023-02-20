@@ -1,0 +1,292 @@
+\documentclass[border=0.2cm]{standalone}
+ 
+% More defined colors
+\usepackage[dvipsnames]{xcolor}
+
+ 
+% Required package
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\tikzset{arrow/.style = {thick,->,>=stealth,}}
+
+
+%  colors
+\definecolor{M1}{rgb}{1.0, 0.88, 0.21}
+\definecolor{M2}{rgb}{0.96, 0.76, 0.76}
+\definecolor{M3}{rgb}{0.52, 0.52, 0.51}
+\definecolor{M4}{rgb}{0.57, 0.36, 0.51}
+\definecolor{M5}{rgb}{0.64, 0.76, 0.68}
+
+\begin{document}
+\begin{tikzpicture}
+ 
+ 
+% M1
+%base
+\node [draw,
+    fill=M1,
+    minimum width=9cm,
+    minimum height=3.5cm,
+    opacity=0.6,
+]  (M1) at (-5.5,4.5) ;
+% caption
+\node (Mudule1) at (-5.7,2.5) {\textbf{Module 1}};
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+]  (M11) at (-8.5,4.5){\textbf{Depthwise}\\ \textbf{Conv2D}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+    right = 0.7 of M11
+]  (M12) {\textbf{Batch} \\ \textbf{Normalization}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    right = 0.6 of M12
+]  (M13)  {\textbf{Activation}};
+% arrows
+\draw [arrow] (M11) -- (M12);
+\draw [arrow] (M12) -- (M13);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% M2
+% base
+\node [draw,
+    fill=M2,
+    minimum width=10cm,
+    minimum height=3.5cm,
+    opacity=0.6,
+]  (M2) at (5,4.5) ;
+
+% caption
+\node (Mudule2) at (4.8,2.5) {\textbf{Module 2}};
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+]  (M21) at (1.3,4.5) {\textbf{Global}\\ \textbf{Average} \\ \textbf{pooling}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    right = 0.6 of M21
+]  (M22) {\textbf{Rescalling}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+    right = 0.6 of M22
+]  (M23)  {\textbf{Conv2D}};
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    right = 0.6 of M23
+]  (M24)  {\textbf{Conv2D}};
+
+
+% arrows
+\draw [arrow] (M21) -- (M22);
+\draw [arrow] (M22) -- (M23);
+\draw [arrow] (M23) -- (M24);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% M3
+% base
+\node [draw,
+    fill=M3,
+    minimum width=20cm,
+    minimum height=3.5cm,
+    opacity=0.6,
+]  (M3) at (0,0) ;
+% caption
+\node (Mudule3) at (-0.5,-2) {\textbf{Module 3}};
+
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+]  (M31) at (-8.7,0) {\textbf{Depthwise}\\ \textbf{Conv2D}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+    right = 0.5 of M31
+]  (M32) {\textbf{Batch} \\ \textbf{Normalization}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    right = 0.5 of M32
+]  (M33)  {\textbf{Activation}};
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+    right = 0.5 of M33
+]  (M34) {\textbf{Zero} \textbf{Padding}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+    right = 0.5 of M34
+]  (M35) {\textbf{Depthwise}\\ \textbf{Conv2D}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+    right = 0.5 of M35
+]  (M36)  {\textbf{Batch} \\ \textbf{Normalization}};
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    right = 0.5 of M36
+]  (M37)  {\textbf{Activation}};
+
+% arrows
+\draw [arrow] (M31) -- (M32);
+\draw [arrow] (M32) -- (M33);
+\draw [arrow] (M33) -- (M34);
+\draw [arrow] (M34) -- (M35);
+\draw [arrow] (M35) -- (M36);
+\draw [arrow] (M36) -- (M37);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% M4
+\node [draw,
+    fill= M4,
+    minimum width=9cm,
+    minimum height=3.5cm,
+    opacity=0.6,
+]  (M4) at (-5.5,-4.5) ;
+% caption
+\node (Mudule4) at  (-5.7,-6.5)  {\textbf{Module 4}};
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+]  (M41) at (-8.5,-4.5){\textbf{Multiply}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    right = 0.7 of M41
+]  (M42) {\textbf{Conv2D}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+    right = 0.6 of M42
+]  (M43)  {\textbf{Batch}  \\ \textbf{Normalization}};
+% arrows
+\draw [arrow] (M41) -- (M42);
+\draw [arrow] (M42) -- (M43);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% M5
+\node [draw,
+    fill=M5,
+    minimum width=10cm,
+    minimum height=3.5cm,
+    opacity=0.6,
+]  (M5) at (5,-4.5) ;
+% caption
+\node (Mudule5) at (4.8,-6.5)  {\textbf{Module 5}};
+
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+]  (M21) at (1.1,-4.5) {\textbf{Multiply}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    right = 0.5 of M21
+]  (M22) {\textbf{Conv2D}} ;
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    align=center,
+    right = 0.5 of M22
+]  (M23)  {\textbf{Batch} \\ \textbf{Normalization}};
+
+\node [draw,
+    fill=white,
+    minimum width=1.75cm,
+    minimum height=1.5cm,
+    opacity=1,
+    right = 0.5 of M23
+]  (M24)  {\textbf{Dropout}};
+
+
+% arrows
+\draw [arrow] (M21) -- (M22);
+\draw [arrow] (M22) -- (M23);
+\draw [arrow] (M23) -- (M24);
+
+\end{tikzpicture}
+ 
+\end{document}

@@ -1,0 +1,170 @@
+\documentclass[border=0.2cm]{standalone}
+ 
+% More defined colors
+\usepackage[dvipsnames]{xcolor}
+
+ 
+% Required package
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\tikzset{arrow/.style = {thick,->,>=stealth,}}
+
+
+%  colors
+\definecolor{M1}{rgb}{1.0, 0.88, 0.21}
+\definecolor{M2}{rgb}{0.96, 0.76, 0.76}
+\definecolor{M3}{rgb}{0.52, 0.52, 0.51}
+\definecolor{M4}{rgb}{0.57, 0.36, 0.51}
+\definecolor{M5}{rgb}{0.64, 0.76, 0.68}
+
+\definecolor{B1}{rgb}{0.53, 0.66, 0.42}
+\definecolor{B2}{rgb}{0.63, 0.79, 0.95}
+\definecolor{B3}{rgb}{1.0, 0.6, 0.4}
+
+
+\begin{document}
+\begin{tikzpicture}
+ 
+ 
+% B1
+%base
+\node [draw,
+    fill=B1,
+    minimum width=6cm,
+    minimum height=9cm,
+    opacity=0.6,
+]  (B1) at (0,0) ;
+% caption
+\node (sub1) at (0,-5) {\textbf{Sub-block 1}};
+
+\node [draw,
+    fill=M1,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M1) at (0.5,3) {} ;
+\node (text) at (0.5,3) {\textbf{Module 1}};
+
+
+\node [draw,
+    fill=M3,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M3) at (-1.5,0)  ;
+\node (text) at (-1.5,0) {\textbf{Module 3}};
+
+
+\node [draw,
+    fill=M4,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M4) at (0.5,-3) {} ;
+\node (text) at (0.5,-3) {\textbf{Module 4}};
+
+
+% arrows
+\draw [arrow] (M1) -- (M3);
+\draw [arrow] (M3) -- (M4);
+\draw [arrow] (M4) -- (M1);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% B2
+%base
+\node [draw,
+    fill=B2,
+    minimum width=6cm,
+    minimum height=9cm,
+    opacity=0.6,
+    right = 0.7 of B1
+]  (B2) ;
+% caption
+\node (sub2) at (6.75,-5) {\textbf{Sub-block 2}};
+
+\node [draw,
+    fill=M2,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M2) at (7.75,3) {} ;
+\node (text) at (7.75,3) {\textbf{Module 2}};
+
+
+\node [draw,
+    fill=M3,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M3) at (5.2,0)  ;
+\node (text) at (5.2,0) {\textbf{Module 3}};
+
+
+\node [draw,
+    fill=M4,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M4) at (7.75,-3) {} ;
+\node (text) at (7.75,-3) {\textbf{Module 4}};
+
+
+% arrows
+\draw [arrow] (M2) -- (M3);
+\draw [arrow] (M3) -- (M4);
+\draw [arrow] (M4) -- (M2);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% B3
+%base
+\node [draw,
+    fill=B3,
+    minimum width=6cm,
+    minimum height=9cm,
+    opacity=0.6,
+    right = 0.7 of B2
+]  (B3) ;
+% caption
+\node (sub3) at (13.5,-5) {\textbf{Sub-block 3}};
+
+
+\node [draw,
+    fill=M2,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M2) at (14.75,3) {} ;
+\node (text) at (14.75,3) {\textbf{Module 2}};
+
+
+\node [draw,
+    fill=M3,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M3) at (12,0)  ;
+\node (text) at (12,0) {\textbf{Module 3}};
+
+
+\node [draw,
+    fill=M5,
+    minimum width=2.5cm,
+    minimum height=1.5cm,
+    opacity=0.6,
+]  (M5) at (14.75,-3) {} ;
+\node (text) at (14.75,-3) {\textbf{Module 5}};
+
+
+% arrows
+\draw [arrow] (M2) -- (M3);
+\draw [arrow] (M3) -- (M5);
+\draw [arrow] (M5) -- (M2);
+
+
+\end{tikzpicture}
+\end{document}
